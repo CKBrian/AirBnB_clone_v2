@@ -129,13 +129,15 @@ class HBNBCommand(cmd.Cmd):
                 if "=" not in params:
                     continue
                 attribute, value = params.split("=")
-                if value[0] != '"' or value[-1] != '"':
-                    continue
-                val = value[1:-1]  # remove enclosing double quotes
-                # escapes any " in val and replaces all _ with a space
-                # if '"' in val or '_' in val:
-                new_val = val.replace("_", " ")  # .replace('"', '\\"')
-                setattr(new_instance, attribute, new_val)
+                # remove double quotes and replace '_' with ' ' in strings
+                if value[0] == '"' or value[-1] == '"':
+                    val = value[1:-1].replace("_", " ")
+                # float numbers
+                elif '.' in value:
+                    val = float(value)
+                else:
+                    val = int(value)
+                setattr(new_instance, attribute, val)
         storage.save()
         print(new_instance.id)
         storage.save()
