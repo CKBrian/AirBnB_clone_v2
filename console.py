@@ -131,7 +131,7 @@ class HBNBCommand(cmd.Cmd):
                 val = value[1:-1]  # remove enclosing double quotes
                 # escapes any " in val and replaces all _ with a space
                 # if '"' in val or '_' in val:
-                new_val = val.replace("_", " ").replace('"', '\"')
+                new_val = val.replace("_", " ").replace('"', '\\"')
                 setattr(new_instance, attribute, new_val)
         storage.save()
         print(new_instance.id)
