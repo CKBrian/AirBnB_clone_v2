@@ -46,6 +46,7 @@ class HBNBCommand(cmd.Cmd):
         # scan for general formating - i.e '.', '(', ')'
         if not ('.' in line and '(' in line and ')' in line):
             return line
+        print("here")
 
         try:  # parse line left to right
             pline = line[:]  # parsed line
@@ -125,6 +126,8 @@ class HBNBCommand(cmd.Cmd):
         # updates instance attributes
         if len(arg) > 1:
             for params in arg[1:]:
+                if "=" not in params:
+                    continue
                 attribute, value = params.split("=")
                 if value[0] != '"' or value[-1] != '"':
                     continue
