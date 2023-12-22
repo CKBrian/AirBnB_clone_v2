@@ -10,6 +10,7 @@ from models.state import State
 from models.city import City
 from models.amenity import Amenity
 from models.review import Review
+from os import getenv
 
 
 class HBNBCommand(cmd.Cmd):
@@ -46,7 +47,6 @@ class HBNBCommand(cmd.Cmd):
         # scan for general formating - i.e '.', '(', ')'
         if not ('.' in line and '(' in line and ')' in line):
             return line
-        print("here")
 
         try:  # parse line left to right
             pline = line[:]  # parsed line
@@ -138,9 +138,9 @@ class HBNBCommand(cmd.Cmd):
                 else:
                     val = int(value)
                 setattr(new_instance, attribute, val)
+        new_instance.save()
         storage.save()
         print(new_instance.id)
-        storage.save()
 
     def help_create(self):
         """ Help information for the create method """
@@ -216,20 +216,29 @@ class HBNBCommand(cmd.Cmd):
     def do_all(self, args):
         """ Shows all objects, or all objects of a class"""
         print_list = []
-
         if args:
-            args = args.split(' ')[0]  # remove possible trailing args
-            if args not in HBNBCommand.classes:
+            *arg, = args.split()  # splits args into a list
+            if arg[0] not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
-            for k, v in storage._FileStorage__objects.items():
-                if k.split('.')[0] == args:
-                    print_list.append(str(v))
+            else:
+                # print database objects
+                if getenv("HBNB_TYPE_STORAGE") == "db":
+                    cls_obj = HBNBCommand.classes[arg[0]]
+                    objects = storage.all(cls_obj)
+                    for row in objects:
+                        print(row)
+                    return
+                # print Filestorage objects
+                for k, v in storage._FileStorage__objects.items():
+                    if k.split('.')[0] == args:
+                        print_list.append(str(v))
+                print(print_list)
         else:
-            for k, v in storage._FileStorage__objects.items():
-                print_list.append(str(v))
-
-        print(print_list)
+            if getenv("HBNB_TYPE_STORAGE") != "db":
+                for k, v in storage._FileStorage__objects.items():
+                    print_list.append(str(v))
+                print(print_list)
 
     def help_all(self):
         """ Help information for the all command """
