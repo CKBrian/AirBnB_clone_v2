@@ -4,6 +4,9 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, Integer, Float, ForeignKey
+from os import getenv
+from models import storage, db_type
+from sqlalchemy.orm import relationship
 
 
 if TYPE_CHECKING:
@@ -31,3 +34,16 @@ class Place(BaseModel, Base):
     latitude = Column(Float, nullable=True)
     longitude = Column(Float, nullable=True)
     amenity_ids = []
+    if db_type == "db":
+        reviews = relationship("Review", backref="places",
+                               cascade="all, delete-orphan")
+
+    else:
+        @property
+        def reviews(self):
+            """ Returns a list of Review instances with
+                place_id equals to the current Place.id
+            """
+            review_objs = [value for key, value in storage.all().items()
+                           if "Review" in key and type(self).id in key]
+            return review_objs
