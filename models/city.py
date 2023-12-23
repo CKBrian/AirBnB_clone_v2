@@ -10,7 +10,12 @@ from sqlalchemy.orm import relationship
 if TYPE_CHECKING:
     from models.state import State
 else:
-    City = "City"
+    State = "State"
+
+if TYPE_CHECKING:
+    from models.place import Place
+else:
+    Place = "Place"
 
 
 class City(BaseModel, Base):
@@ -18,3 +23,5 @@ class City(BaseModel, Base):
     __tablename__ = "cities"
     state_id = Column(String(60), ForeignKey("states.id"), nullable=False)
     name = Column(String(128), nullable=False)
+    places = relationship("Place", backref="city",
+                          cascade="all, delete-orphan")
