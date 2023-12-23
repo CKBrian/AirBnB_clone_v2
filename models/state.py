@@ -18,10 +18,11 @@ class State(BaseModel, Base):
     """ State class """
     __tablename__ = "states"
     name = Column(String(128), nullable=False)
-    cities = relationship("City", backref="state",
-                          cascade="all, delete-orphan")
+    if db_type == "db":
+        cities = relationship("City", backref="state",
+                              cascade="all, delete-orphan")
 
-    if db_type != "db":
+    else:
         @property
         def cities(self):
             """Gets the states id"""
