@@ -18,10 +18,10 @@ class State(BaseModel, Base):
     """ State class """
     __tablename__ = "states"
     name = Column(String(128), nullable=False)
+
     if db_type == "db":
         cities = relationship("City", backref="state",
                               cascade="all, delete-orphan")
-
     else:
         @property
         def cities(self):
