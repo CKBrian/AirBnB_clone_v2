@@ -226,19 +226,17 @@ class HBNBCommand(cmd.Cmd):
                 if getenv("HBNB_TYPE_STORAGE") == "db":
                     cls_obj = HBNBCommand.classes[arg[0]]
                     objects = storage.all(cls_obj)
-                    for row in objects:
-                        print(row)
-                    return
-                # print Filestorage objects
-                for k, v in storage._FileStorage__objects.items():
+                else:  # print Filestorage objects
+                    objects = storage._FileStorage__objects
+                for k, v in objects.items():
                     if k.split('.')[0] == args:
                         print_list.append(str(v))
-                print(print_list)
         else:
             if getenv("HBNB_TYPE_STORAGE") != "db":
                 for k, v in storage._FileStorage__objects.items():
                     print_list.append(str(v))
-                print(print_list)
+
+        print(print_list)
 
     def help_all(self):
         """ Help information for the all command """
