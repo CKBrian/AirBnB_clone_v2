@@ -19,8 +19,13 @@ sudo mkdir -p /data/web_static/shared/
 sudo mkdir -p /data/web_static/releases/test/
 
 # Creates a fake HTML file /data/web_static/releases/test/index.html (with simple content, to test your Nginx configuration)
-content="
-<html><body><h1>This is a HBNB releases test page</h1><body/></html>
+content="<html>
+  <head>
+  </head>
+  <body>
+    Holberton School
+  </body>
+</html>
 "
 echo "$content" | sudo tee /data/web_static/releases/test/index.html
 
@@ -35,7 +40,7 @@ sudo chown -R ubuntu:ubuntu /data/
 
 #Update the Nginx configuration to serve the content of /data/web_static/current/ to hbnb_static (ex: https://mydomainname.tech/hbnb_static). Don’t forget to restart Nginx after updating the configuration:
 #Use alias inside your Nginx configuration
-content='\n\tlocation \/hbnb_static {\n\t\talias data/web_static/current/;\n\t\ttry_files $uri $uri\/ =404;\n\t}'
+content='\n\tlocation \/hbnb_static {\n\t\talias /data/web_static/current/;\n\t\ttry_files $uri $uri\/ =404;\n\t}'
 sudo sed -i "/server_name _;/a\\$content" /etc/nginx/sites-available/default
 
 # reload nginx
