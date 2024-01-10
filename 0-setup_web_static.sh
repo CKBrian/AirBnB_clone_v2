@@ -3,15 +3,6 @@
 # Install Nginx if it not already installed
 sudo apt update && sudo apt install nginx
 
-# Creates the folder /data/ if it doesn’t already exist
-sudo mkdir -p /data/
-
-# Creates the folder /data/web_static/ if it doesn’t already exist
-sudo mkdir -p /data/web_static/
-
-# Creates the folder /data/web_static/releases/ if it doesn’t already exist
-sudo mkdir -p /data/web_static/releases/
-
 # Creates the folder /data/web_static/shared/ if it doesn’t already exist
 sudo mkdir -p /data/web_static/shared/
 
