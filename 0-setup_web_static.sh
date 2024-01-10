@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-# sets up web servers for the deployment of web_static
 # Install Nginx if it not already installed
 sudo apt update && sudo apt install nginx
 
@@ -19,20 +18,16 @@ content="<html>
 </html>"
 echo "$content" | sudo tee /data/web_static/releases/test/index.html
 
-# Creates a symbolic link /data/web_static/current linked to the /data/web_static/releases/test/ folder. If the symbolic link already exists, it should be deleted and recreated every time the script is ran.
-if [ -L "/data/web_static/current" ];then
-    rm /data/web_static/current
-fi
+# Creates a symbolic link /data/web_static/current linked to the /data/web_static/releases/test/ folder.
 sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
 
-# Give ownership of the /data/ folder to the ubuntu user AND group (you can assume this user and group exist). This should be recursive; everything inside should be created/owned by this user/group.
+# Give ownership of the /data/ folder to the ubuntu user AND group .
 sudo chown -hR ubuntu:ubuntu /data/
 
-#Update the Nginx configuration to serve the content of /data/web_static/current/ to hbnb_static (ex: https://mydomainname.tech/hbnb_static). Don’t forget to restart Nginx after updating the configuration:
-#Use alias inside your Nginx configuration
+#Update the Nginx configuration to serve the content of /data/web_static/current/ to hbnb_static
 content=$"\n\tlocation /hbnb_static {\n\t\talias /data/web_static/current/;\n\t\ttry_files \$uri \$uri/ =404;\n\t}"
 #content="\n\tlocation \/hbnb_static {\n\t\talias /data/web_static/current/;\n\t\ttry_files $uri $uri\/ =404;\n\t}"
 sudo sed -i "/server_name _;/a\\$content" /etc/nginx/sites-available/default
 
 # reload nginx
-sudo service nginx start
+sudo service nginx restart
