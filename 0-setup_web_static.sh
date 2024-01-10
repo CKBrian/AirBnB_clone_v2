@@ -25,8 +25,7 @@ content="<html>
   <body>
     Holberton School
   </body>
-</html>
-"
+</html>"
 echo "$content" | sudo tee /data/web_static/releases/test/index.html
 
 # Creates a symbolic link /data/web_static/current linked to the /data/web_static/releases/test/ folder. If the symbolic link already exists, it should be deleted and recreated every time the script is ran.
@@ -40,7 +39,8 @@ sudo chown -R ubuntu:ubuntu /data/
 
 #Update the Nginx configuration to serve the content of /data/web_static/current/ to hbnb_static (ex: https://mydomainname.tech/hbnb_static). Don’t forget to restart Nginx after updating the configuration:
 #Use alias inside your Nginx configuration
-content='\n\tlocation \/hbnb_static {\n\t\talias /data/web_static/current/;\n\t\ttry_files $uri $uri\/ =404;\n\t}'
+content=$"\n\tlocation /hbnb_static {\n\t\talias /data/web_static/current/;\n\t\ttry_files \$uri \$uri/ =404;\n\t}"
+#content="\n\tlocation \/hbnb_static {\n\t\talias /data/web_static/current/;\n\t\ttry_files $uri $uri\/ =404;\n\t}"
 sudo sed -i "/server_name _;/a\\$content" /etc/nginx/sites-available/default
 
 # reload nginx
