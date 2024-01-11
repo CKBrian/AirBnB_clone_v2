@@ -3,14 +3,55 @@
 servers, using the function deploy"""
 
 
-do_pack = __import__('1-pack_web_static').do_pack
-do_deploy = __import__('2-do_deploy_web_static').do_deploy
+import os
+from datetime import datetime
+from fabric.api import env, put, run, local
+env.hosts = ['100.26.173.252', '54.160.114.174']
+
+
+def do_pack():
+    """Generate a .tgz archive from the contents of the web_static dir"""
+    try:
+        timestamp = datetime.utcnow().strftime('%Y%m%d%H%M%S')
+        filename = "versions/web_static_{}.tgz".format(timestamp)
+        local("mkdir -p versions")
+        local("tar -cvzf {} web_static".format(filename))
+        return filename
+    except Exception as e:
+        return None
+
+
+def do_deploy(archive_path):
+    """distributes an archive to web servers"""
+    if not os.path.exists(archive_path):
+        return False
+    try:
+        ar_file = archive_path.split('.')[0]
+        ar_dir = ar_file.split('/')[1]
+
+        src = f"{ar_file}.tgz"
+        dest = "/tmp/{}.tgz".format(ar_dir)
+        put(src, dest)
+
+        run("mkdir -p /data/web_static/releases/{}/".format(ar_dir))
+        run("tar -xzf /tmp/{}.tgz -C /data/web_static/releases/{}/"
+            .format(ar_dir, ar_dir))
+        run("rm /tmp/{}.tgz".format(ar_dir))
+        path = f"/data/web_static/releases/{ar_dir}/web_static"
+        run(f"cp -r {path}/* /data/web_static/releases/{ar_dir}/")
+        run(f"rm -rf {path}")
+        run("rm -rf /data/web_static/current")
+        Dir = "/data/web_static"
+        run(f"ln -sf {Dir}/releases/{ar_dir}/ {Dir}/current")
+        return True
+    except Exception as e:
+        return False
 
 
 def deploy():
     """creates and distributes an archive to your web
     servers, using the function deploy:"""
-    archive_path = do_pack()
-    if archive_path is None:
+    path = do_pack()
+    if path is None:
         return False
-    return do_deploy(archive_path)
+    return do_deploy(path)
