@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# determines if a domain and subdomain is an A record
+
+domain=$1
+if [ -z "$2" ];then
+    sd_list=("www" "lb-01" "web-01" "web-02")
+else
+    sd_list=("$2")
+fi
+
+for s_dom in "${sd_list[@]}"; do
+    uri="$s_dom.$domain"
+    RECORD_TYPE=$(dig "$uri" | grep -A2 "ANSWER SECTION:"| sed -n '2p')
+    R_TYPE=$(echo "$RECORD_TYPE" | awk '{print $4}')
+    IP=$(echo "$RECORD_TYPE" | awk '{print $5}')
+    echo "The subdomain $s_dom is a $R_TYPE record and points to $IP"
+done
