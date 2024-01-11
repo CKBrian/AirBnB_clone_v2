@@ -2,18 +2,32 @@
 """defines a module that distributes an archive to your web servers,
     using the function do_deploy:"""
 from fabric.api import env, put, run
+import os
 
 
-env.hosts = ['ubuntu@100.26.173.252', 'ubuntu@54.160.114.174']
+env.hosts = ['100.26.173.252', '54.160.114.174']
 
 
 def do_deploy(archive_path):
     """distributes an archive to web servers"""
-    ar_file = "web_static_20240111082326"
-    put("versions/{}.tgz" "/tmp/{}.tgz".format(ar_file))
+    if not os.path.exists(archive_path):
+        return False
+    ar_file = archive_path.split('.')[0]
+    ar_dir = ar_file.split('/')[1]
+
+    src = f"{ar_file}.tgz"
+    dest = "/tmp/{}.tgz".format(ar_dir)
+    put(src, dest)
+
+    run("mkdir -p /data/web_static/releases/{}/".format(ar_dir))
     run("tar -xzf /tmp/{}.tgz -C /data/web_static/releases/{}/"
-        .format(ar_file))
-    run("rm /tmp/{}.tgz".format(ar_file))
-    run("rm /data/web_static/current".format(ar_file))
+        .format(ar_dir, ar_dir))
+    run("rm /tmp/{}.tgz".format(ar_dir))
+    run("rm /data/web_static/current")
+    path = f"/data/web_static/releases/{ar_dir}/web_static/*"
+    run(f"cp -r {path} /data/web_static/releases/{ar_dir}")
+    run(f"rm -rf {path}")
     Dir = "/data/web_static"
-    run(f"sudo ln -sf {Dir}/current {Dir}/releases/{ar_file}/")
+    run(f"ln -sf {Dir}/releases/{ar_dir}/ {Dir}/current")
+    print("New version deployed!")
+    return True
