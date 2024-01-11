@@ -12,13 +12,7 @@ sudo mkdir -p /data/web_static/shared/
 sudo mkdir -p /data/web_static/releases/test/
 
 # Creates a fake HTML file /data/web_static/releases/test/index.html
-content="<html>
-  <head>
-  </head>
-  <body>
-    Holberton School
-  </body>
-</html>"
+content="<html><head></head><body>Holberton School</body></html>"
 echo "$content" > /data/web_static/releases/test/index.html
 
 # Creates a symbolic link /data/web_static/current linked to the /data/web_static/releases/test/ folder.
