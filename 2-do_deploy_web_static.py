@@ -30,6 +30,7 @@ def do_deploy(archive_path):
         run(f"rm -rf {path}")
         Dir = "/data/web_static"
         run(f"ln -sf {Dir}/releases/{ar_dir}/ {Dir}/current")
+        run("sudo service nginx restart")
         print("New version deployed!")
         return True
     except Exception as e:
