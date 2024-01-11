@@ -15,5 +15,5 @@ def do_deploy(archive_path):
         .format(ar_file))
     run("rm /tmp/{}.tgz".format(ar_file))
     run("rm /data/web_static/current".format(ar_file))
-    run(f"sudo ln -sf /data/web_static/current
-        /data/web_static/releases/{ar_file}/")
+	Dir = "/data/web_static"
+    run(f"sudo ln -sf {Dir}/current {Dir}/releases/{ar_file}/")
