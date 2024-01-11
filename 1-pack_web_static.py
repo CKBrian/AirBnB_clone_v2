@@ -7,7 +7,11 @@ from datetime import datetime
 
 def do_pack():
     """Generate a .tgz archive from the contents of the web_static dir"""
-    timestamp = datetime.utcnow().strftime('%Y%m%d%H%M%S')
-    filename = "versions/web_static_{}.tgz".format(timestamp)
-    local("mkdir -p versions")
-    local("tar -cvzf {} web_static".format(filename))
+    try:
+        timestamp = datetime.utcnow().strftime('%Y%m%d%H%M%S')
+        filename = "versions/web_static_{}.tgz".format(timestamp)
+        local("mkdir -p versions")
+        local("tar -cvzf {} web_static".format(filename))
+        return filename
+    except Exception as e:
+        return None
