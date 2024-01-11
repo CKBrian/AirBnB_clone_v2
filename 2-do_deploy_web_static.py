@@ -10,9 +10,9 @@ env.hosts = ['100.26.173.252', '54.160.114.174']
 
 def do_deploy(archive_path):
     """distributes an archive to web servers"""
+    if not os.path.exists(archive_path):
+        return False
     try:
-        if not os.path.exists(archive_path):
-            return False
         ar_file = archive_path.split('.')[0]
         ar_dir = ar_file.split('/')[1]
 
