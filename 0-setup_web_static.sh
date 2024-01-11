@@ -11,7 +11,8 @@ content="<html>
     Holberton School
   </body>
 </html>"
-echo "$content" | sudo tee /data/web_static/releases/test/index.html
+echo "$content" > /data/web_static/releases/test/index.html
+sudo rm -f /data/web_static/current
 sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
 sudo chown -hR ubuntu:ubuntu /data/
 content=$"\n\tlocation /hbnb_static {\n\t\talias /data/web_static/current/;\n\t}"
