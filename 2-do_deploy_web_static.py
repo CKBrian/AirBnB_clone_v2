@@ -24,12 +24,12 @@ def do_deploy(archive_path):
         run("tar -xzf /tmp/{}.tgz -C /data/web_static/releases/{}/"
             .format(ar_dir, ar_dir))
         run("rm /tmp/{}.tgz".format(ar_dir))
-        run("rm /data/web_static/current")
+        run("rm -rf /data/web_static/current")
         path = f"/data/web_static/releases/{ar_dir}/web_static"
-        run(f"cp -r {path}/* /data/web_static/releases/{ar_dir}")
+        run(f"mv {path}/* /data/web_static/releases/{ar_dir}/")
         run(f"rm -rf {path}")
         Dir = "/data/web_static"
         run(f"ln -sf {Dir}/releases/{ar_dir}/ {Dir}/current")
         return True
-    except:
+    except Exception as e:
         return False
