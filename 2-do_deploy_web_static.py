@@ -13,18 +13,23 @@ def do_deploy(archive_path):
     if os.path.exists(archive_path) is False:
         return False
     try:
-        file_name = archive_path.split("/")[-1]
-        no_extension = file_name.split(".")[0]
-        archive_dir = f"/data/web_static/releases/{no_extension}"
+        ar_file = archive_path.split('.')[0]
+        ar_dir = ar_file.split('/')[1]
 
-        put(archive_path, '/tmp/')
-        run(f'mkdir -p {archive_dir}')
-        run(f'tar -xzf /tmp/{file_name} -C {archive_dir}/')
-        run(f'rm /tmp/{file_name}')
-        run(f'mv {archive_dir}/web_static/* {archive_dir}/')
-        run(f'rm -rf {archive_dir}/web_static')
-        run(f'rm -rf /data/web_static/current')
-        run(f'ln -s {archive_dir}/ /data/web_static/current')
+        src = f"{ar_file}.tgz"
+        dest = "/tmp/{}.tgz".format(ar_dir)
+        put(src, dest)
+
+        run("mkdir -p /data/web_static/releases/{}/".format(ar_dir))
+        run("tar -xzf /tmp/{}.tgz -C /data/web_static/releases/{}/"
+            .format(ar_dir, ar_dir))
+        run("rm /tmp/{}.tgz".format(ar_dir))
+        path = f"/data/web_static/releases/{ar_dir}/web_static"
+        run(f"cp -r {path}/* /data/web_static/releases/{ar_dir}/")
+        run(f"rm -rf {path}")
+        run("rm -rf /data/web_static/current")
+        Dir = "/data/web_static"
+        run(f"ln -sf {Dir}/releases/{ar_dir}/ {Dir}/current")
         return True
     except Exception as e:
         return False
