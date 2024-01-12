@@ -30,14 +30,9 @@ file {'/data/web_static/releases/test/index.html':
 }
 
 # Creates a symbolic link /data/web_static/current linked to the /data/web_static/releases/test/ folder.
-exec {'remove_symbolic_link':
-  command  => 'if [ -L "/data/web_static/current" ];then sudo rm /data/web_static/current; fi',
-  provider => shell,
-}
-
-exec { 'symbolic_link':
-  command  => 'sudo ln -sf /data/web_static/releases/test/ /data/web_static/current',
-  provider => shell,
+file { '/data/web_static/current':
+  ensure => link,
+  target => '/data/web_static/releases/test/',
 }
 
 # Update the Nginx configuration to serve the content of /data/web_static/current/ to hbnb_static
