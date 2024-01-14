@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """defines a module that distributes an archive to your web servers,
     using the function do_deploy:"""
-from fabric.api import env, put, run
+from fabric.api import env, put, sudo
 import os
 
 
@@ -19,16 +19,16 @@ def do_deploy(archive_path):
         src = f"{ar_file}.tgz"
         put(src, "/tmp/")
 
-        run("mkdir -p /data/web_static/releases/{}/".format(ar_dir))
-        run("tar -xzf /tmp/{}.tgz -C /data/web_static/releases/{}/"
-            .format(ar_dir, ar_dir))
-        run("rm /tmp/{}.tgz".format(ar_dir))
+        sudo("mkdir -p /data/web_static/releases/{}/".format(ar_dir))
+        sudo("tar -xzf /tmp/{}.tgz -C /data/web_static/releases/{}/"
+             .format(ar_dir, ar_dir))
+        sudo("rm /tmp/{}.tgz".format(ar_dir))
         path = f"/data/web_static/releases/{ar_dir}/web_static"
-        run(f"cp -r {path}/* /data/web_static/releases/{ar_dir}/")
-        run(f"rm -rf {path}")
-        run("rm -rf /data/web_static/current")
+        sudo(f"mv {path}/* /data/web_static/releases/{ar_dir}/")
+        sudo(f"rm -rf {path}")
+        sudo("rm -rf /data/web_static/current")
         Dir = "/data/web_static"
-        run(f"ln -sf {Dir}/releases/{ar_dir}/ {Dir}/current")
+        sudo(f"ln -sf {Dir}/releases/{ar_dir}/ {Dir}/current")
         return True
     except Exception as e:
         return False
