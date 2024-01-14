@@ -38,7 +38,7 @@ def do_deploy(archive_path):
              .format(ar_dir, ar_dir))
         sudo("rm /tmp/{}.tgz".format(ar_dir))
         path = f"/data/web_static/releases/{ar_dir}/web_static"
-        sudo(f"cp -r {path}/* /data/web_static/releases/{ar_dir}/")
+        sudo(f"mv {path}/* /data/web_static/releases/{ar_dir}/")
         sudo(f"rm -rf {path}")
         sudo("rm -rf /data/web_static/current")
         Dir = "/data/web_static"
