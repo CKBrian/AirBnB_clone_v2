@@ -35,7 +35,7 @@ def do_deploy(archive_path):
 
         sudo("mkdir -p /data/web_static/releases/{}/".format(ar_dir))
         sudo("tar -xzf /tmp/{}.tgz -C /data/web_static/releases/{}/"
-            .format(ar_dir, ar_dir))
+             .format(ar_dir, ar_dir))
         sudo("rm /tmp/{}.tgz".format(ar_dir))
         path = f"/data/web_static/releases/{ar_dir}/web_static"
         sudo(f"cp -r {path}/* /data/web_static/releases/{ar_dir}/")
