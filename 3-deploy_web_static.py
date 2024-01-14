@@ -23,28 +23,26 @@ def do_pack():
 
 def do_deploy(archive_path):
     """distributes an archive to web servers"""
-    if not os.path.exists(archive_path):
+    if os.path.exists(archive_path) is False:
         return False
     try:
         ar_file = archive_path.split('.')[0]
         ar_dir = ar_file.split('/')[1]
 
         src = f"{ar_file}.tgz"
-        dest = "/tmp/"
-        put(src, dest)
+        put(src, "/tmp/")
 
         sudo("mkdir -p /data/web_static/releases/{}/".format(ar_dir))
         sudo("tar -xzf /tmp/{}.tgz -C /data/web_static/releases/{}/"
              .format(ar_dir, ar_dir))
         sudo("rm /tmp/{}.tgz".format(ar_dir))
-        path = f"/data/web_static/releases/{ar_dir}/web_static"
-        sudo(f"mv {path}/* /data/web_static/releases/{ar_dir}/")
-        sudo(f"rm -rf {path}")
+        path = f"/data/web_static/releases/{ar_dir}"
+        sudo(f"mv {path}/web_static/* {path}/")
         sudo("rm -rf /data/web_static/current")
         Dir = "/data/web_static"
-        sudo(f"ln -sf {Dir}/releases/{ar_dir}/ {Dir}/current")
+        sudo(f"ln -s {path}/ {Dir}/current")
         return True
-    except Exception as e:
+    except:
         return False
 
 
