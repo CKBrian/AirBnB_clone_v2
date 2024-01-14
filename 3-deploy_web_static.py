@@ -30,7 +30,7 @@ def do_deploy(archive_path):
         ar_dir = ar_file.split('/')[1]
 
         src = f"{ar_file}.tgz"
-        dest = "/tmp/{}.tgz".format(ar_dir)
+        dest = "/tmp/"
         put(src, dest)
 
         run("mkdir -p /data/web_static/releases/{}/".format(ar_dir))
