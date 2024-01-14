@@ -23,12 +23,11 @@ def do_deploy(archive_path):
         sudo("tar -xzf /tmp/{}.tgz -C /data/web_static/releases/{}/"
              .format(ar_dir, ar_dir))
         sudo("rm /tmp/{}.tgz".format(ar_dir))
-        path = f"/data/web_static/releases/{ar_dir}/web_static"
-        sudo(f"mv {path}/* /data/web_static/releases/{ar_dir}/")
-        sudo(f"rm -rf {path}")
+        path = f"/data/web_static/releases/{ar_dir}"
+        sudo(f"mv {path}/web_static/* {path}/")
         sudo("rm -rf /data/web_static/current")
         Dir = "/data/web_static"
-        sudo(f"ln -sf {Dir}/releases/{ar_dir}/ {Dir}/current")
+        sudo(f"ln -s {path}/ {Dir}/current")
         return True
     except Exception as e:
         return False
