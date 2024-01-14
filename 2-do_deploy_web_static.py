@@ -6,11 +6,13 @@ import os
 
 
 env.hosts = ['100.26.173.252', '54.160.114.174']
+env.user = "ubuntu"
+env.key_filename = "my_ssh_private_key"
 
 
 def do_deploy(archive_path):
     """distributes an archive to web servers"""
-    if not os.path.exists(archive_path):
+    if os.path.exists(archive_path) is False:
         return False
     try:
         ar_file = archive_path.split('.')[0]
@@ -29,5 +31,5 @@ def do_deploy(archive_path):
         Dir = "/data/web_static"
         sudo(f"ln -s {path}/ {Dir}/current")
         return True
-    except Exception as e:
+    except:
         return False
