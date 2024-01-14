@@ -5,7 +5,7 @@ servers, using the function deploy"""
 
 import os
 from datetime import datetime
-from fabric.api import env, put, run, local
+from fabric.api import env, put, sudo, local
 env.hosts = ['100.26.173.252', '54.160.114.174']
 
 
@@ -33,16 +33,16 @@ def do_deploy(archive_path):
         dest = "/tmp/"
         put(src, dest)
 
-        run("mkdir -p /data/web_static/releases/{}/".format(ar_dir))
-        run("tar -xzf /tmp/{}.tgz -C /data/web_static/releases/{}/"
+        sudo("mkdir -p /data/web_static/releases/{}/".format(ar_dir))
+        sudo("tar -xzf /tmp/{}.tgz -C /data/web_static/releases/{}/"
             .format(ar_dir, ar_dir))
-        run("rm /tmp/{}.tgz".format(ar_dir))
+        sudo("rm /tmp/{}.tgz".format(ar_dir))
         path = f"/data/web_static/releases/{ar_dir}/web_static"
-        run(f"cp -r {path}/* /data/web_static/releases/{ar_dir}/")
-        run(f"rm -rf {path}")
-        run("rm -rf /data/web_static/current")
+        sudo(f"cp -r {path}/* /data/web_static/releases/{ar_dir}/")
+        sudo(f"rm -rf {path}")
+        sudo("rm -rf /data/web_static/current")
         Dir = "/data/web_static"
-        run(f"ln -sf {Dir}/releases/{ar_dir}/ {Dir}/current")
+        sudo(f"ln -sf {Dir}/releases/{ar_dir}/ {Dir}/current")
         return True
     except Exception as e:
         return False
