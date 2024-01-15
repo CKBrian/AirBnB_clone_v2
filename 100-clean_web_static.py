@@ -12,26 +12,24 @@ env.key_filename = "my_ssh_private_key"
 
 def do_clean(number=0):
     """Deletes old archives"""
-    try:
+    local_versions = local('ls -t ~/AirBnB_Clone_V2/versions/',
+                           capture=True).split()
+    remote_versions = sudo('ls -t /data/web_static/releases/',
+                           quiet=True).split()
+
+    number = int(number)
+    num_to_keep = 1 if number <= 0 else number
+
+    if len(local_versions) > num_to_keep:
+        local_to_delete = local_versions[num_to_keep:]
+        for archive in local_to_delete:
+            local('rm -f ~/AirBnB_Clone_V2/versions/{}'.format(archive))
+
+    if len(remote_versions) > num_to_keep:
+        remote_to_delete = remote_versions[num_to_keep:]
+        with cd("/data/web_static/releases"):
+            for archive in remote_to_delete:
+                sudo('rm -rf {}'.format(archive.strip(".tgz")))
         number = int(number)
         if number < 0:
             return False
-
-        # Get a list of all archives in the versions folder
-        local_archives = local('ls -1t versions', capture=True).split('\n')
-        to_delete_local = local_archives[number:]
-
-        # Delete unnecessary local archives
-        for archive in to_delete_local:
-            local('rm versions/{}'.format(archive))
-
-        # Get a list of all archives in the releases folder on remote servers
-        remote_ar = run('ls -1t /data/web_static/releases',
-                        quiet=True).split('\n')
-        to_delete_remote = remote_ar[number:]
-
-        # Delete unnecessary remote archives
-        for archive in to_delete_remote:
-            sudo('rm -rf /data/web_static/releases/{}'.format(archive))
-    except Exception as e:
-        pass
