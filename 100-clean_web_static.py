@@ -12,8 +12,7 @@ env.key_filename = "my_ssh_private_key"
 
 def do_clean(number=0):
     """Deletes old archives"""
-    with cd("/data/web_static/releases"):
-        magic = sudo("ls -t .").split()
+    mc = sudo("ls -t /data/web_static/releases").split()
     paths = "/data/web_static/releases"
     number = int(number)
 
@@ -22,10 +21,10 @@ def do_clean(number=0):
     else:
         num = number
 
-    if len(magic) > 0:
-        if len(magic) == num or len(magic) == 0:
+    if len(mc) > 0:
+        if len(mc) == num or len(mc) == 0:
             pass
         else:
-            to_delete = magic[num:]
+            to_delete = mc[num:]
             for archive in to_delete:
                 sudo('rm -rf {}/{}'.format(paths, archive.strip(".tgz")))
