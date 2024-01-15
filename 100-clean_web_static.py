@@ -25,11 +25,11 @@ def do_clean(number=0):
         for archive in local_to_delete:
             local('rm -f ~/AirBnB_Clone_V2/versions/{}'.format(archive))
 
+    with cd("/data/web_static/releases"):
+        remote_versions = sudo("ls -t .").split()
+
     if len(remote_versions) > num_to_keep:
         remote_to_delete = remote_versions[num_to_keep:]
-        with cd("/data/web_static/releases"):
-            for archive in remote_to_delete:
-                sudo('rm -rf {}'.format(archive.strip(".tgz")))
-        number = int(number)
-        if number < 0:
-            return False
+        for archive in remote_to_delete:
+            sudo('rm -rf {}/{}'.format("/data/web_static/releases",
+                                       archive.strip(".tgz")))
