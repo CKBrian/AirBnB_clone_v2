@@ -33,16 +33,16 @@ def do_deploy(archive_path):
         sudo('rm /tmp/{}'.format(archive_name))
 
         # Move the contents of the extracted folder to the release folder
-        # sudo('mv {}/{}/web_static/* {}/{}/'.
-        #      format(releases, archive_base, releases, archive_base))
+        sudo('mv {}/{}/web_static/* {}/{}/'.
+             format(releases, archive_base, releases, archive_base))
 
         # Remove the now-empty web_static folder
-        # sudo('rm -rf {}/{}/web_static'
-        #      .format(releases, archive_base))
+        sudo('rm -rf {}/{}/web_static'.
+             format(releases, archive_base))
 
         # Update the symbolic link
         sudo('rm -rf /data/web_static/current')
-        sudo('ln -s {}/{}/web_static/ /data/web_static/current'.
+        sudo('ln -s {}/{}/ /data/web_static/current'.
              format(releases, archive_base))
 
         print("New version deployed!")
