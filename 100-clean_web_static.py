@@ -3,8 +3,7 @@
     using the function do_clean:"""
 
 from fabric.api import *
-from fabric.state import *
-import os
+import os.path
 
 env.hosts = ['100.26.173.252', '54.160.114.174']
 env.user = "ubuntu"
@@ -15,16 +14,15 @@ def do_clean(number=0):
     """Deletes old archives"""
     with cd("/data/web_static/releases"):
         magic = sudo("ls -t .").split()
-
     paths = "/data/web_static/releases"
     number = int(number)
+
     if number == 0:
         num = 1
     else:
         num = number
 
     if len(magic) > 0:
-        # Assuming you want to keep the most recent 'num' archives
         if len(magic) == num or len(magic) == 0:
             pass
         else:
