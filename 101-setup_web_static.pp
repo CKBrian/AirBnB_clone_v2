@@ -9,18 +9,22 @@ exec { 'update':
 }
 
 # Creates the folder /data/web_static/shared/ if it doesn’t already exist
-file { '/data/web_static/shared/':
-  ensure  => 'directory',
-  recurse => true,
-  owner   => 'ubuntu',
-  group   => 'ubuntu',
+
+exec { 'creates /data/web_static/shared/':
+  command  => 'sudo mkdir -p /data/web_static/shared/',
+  provider => shell,
 }
+
 # Creates the folder /data/web_static/releases/test/ if it doesn’t already exist
-file { '/data/web_static/releases/test':
-  ensure  => 'directory',
-  recurse => true,
-  owner   => 'ubuntu',
-  group   => 'ubuntu',
+exec { 'creates /data/web_static/releases/test':
+  command  => 'sudo mkdir -p /data/web_static/releases/test/',
+  provider => shell,
+}
+
+# Give ownership of the /data/ folder to the ubuntu user AND group .
+exec {'Dir_ownership':
+  command  => 'sudo chown -hR ubuntu:ubuntu /data/',
+  provider => shell,
 }
 
 # Creates a fake HTML file /data/web_static/releases/test/index.html
