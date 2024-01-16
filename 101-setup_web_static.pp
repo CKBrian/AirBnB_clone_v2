@@ -41,10 +41,10 @@ file { '/data/web_static/current':
 
 # Update the Nginx configuration to serve the content of /data/web_static/current/ to hbnb_static
 file_line {'hbnb_static':
-  path   => '/etc/nginx/sites-available/default',
-  line   => "^\tserver_name _;\n\tlocation /hbnb_static {\n\t\talias /data/web_static/current/;\n\t}",
-  match  => '^\tserver_name _;',
-  after  => '^\tserver_name _;',
+  path  => '/etc/nginx/sites-available/default',
+  line  => "^\tserver_name _;\n\tlocation /hbnb_static {\n\t\talias /data/web_static/current/;\n\t}",
+  match => '^\tserver_name _;',
+  after => '^\tserver_name _;',
 }
 # Update the Nginx configuration to serve the content of /data/web_static/current/ to hbnb_static
 #$path = '/etc/nginx/sites-available/default'
