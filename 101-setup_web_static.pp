@@ -4,7 +4,7 @@ exec { 'update':
   provider => shell,
 }
 # Install NGINX and ensure it's running
--> package {'nginx':
+package {'nginx':
   ensure => present,
 }
 
@@ -40,21 +40,15 @@ file { '/data/web_static/current':
 }
 
 # Update the Nginx configuration to serve the content of /data/web_static/current/ to hbnb_static
-file_line {'hbnb_static':
-  path  => '/etc/nginx/sites-available/default',
-  line  => "^\tserver_name _;\n\tlocation /hbnb_static {\n\t\talias /data/web_static/current/;\n\t}",
-  match => '^\tserver_name _;',
-  after => '^\tserver_name _;',
+$n_path = '/etc/nginx/sites-available/default'
+$n_current = '\ \n\tlocation /hbnb_static {\n\t\talias /data/web_static/current/;\n\t}'
+exec { 'update_nginx_config':
+  command  => "sudo sed -i \"/server_name _;/a${n_current}\" ${n_path}",
+  provider => shell,
 }
-# Update the Nginx configuration to serve the content of /data/web_static/current/ to hbnb_static
-#$path = '/etc/nginx/sites-available/default'
-#exec { 'update_nginx_config':
-#  command  => "sudo sed -i \"/server_name _;/a\ \n\tlocation /hbnb_static {\n\t\talias /data/web_static/current/;\n\t}\" ${path}",
-#  provider => shell,
-#}
 
 # reloads Nginx configs
--> exec { 'restart service':
+exec { 'restart service':
   command  => 'sudo service nginx restart',
   provider => shell,
 }
