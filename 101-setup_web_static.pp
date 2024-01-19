@@ -44,7 +44,7 @@ $n_path = '/etc/nginx/sites-available/default'
 $n_current = '\ \n\tlocation /hbnb_static {\n\t\talias /data/web_static/current/;\n\t}'
 exec { 'update_nginx_config':
   command  => "sudo sed -i \"/server_name _;/a${n_current}\" ${n_path}",
-  onlyif   => "! grep -q \"location /hbnb_static {\" /etc/nginx/sites-available/default;"
+  onlyif   => "! grep -q \"location /hbnb_static {\" /etc/nginx/sites-available/default;",
   provider => shell,
 }
 
