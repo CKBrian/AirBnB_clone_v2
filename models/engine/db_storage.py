@@ -66,3 +66,8 @@ class DBStorage:
         # create session to interact with database
         Session = sessionmaker(bind=self.__engine, expire_on_commit=False)
         self.__session = scoped_session(Session)
+
+    def close(self):
+        """calls remove() method on the private
+        session attribute (self.__session)"""
+        self.__session.remove()
