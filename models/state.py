@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
-from models import db_type
+from os import getenv
 
 
 if TYPE_CHECKING:
@@ -13,21 +13,27 @@ if TYPE_CHECKING:
 else:
     City = "City"
 
+if TYPE_CHECKING:
+    from models.engine import FileStorage
+else:
+    FileStorage = "FileStorage"
+
 
 class State(BaseModel, Base):
     """ State class """
-    __tablename__ = "states"
-    name = Column(String(128), nullable=False)
-
-    if db_type == "db":
+    if getenv("HBNB_TYPE_STORAGE") == "db":
+        __tablename__ = "states"
+        name = Column(String(128), nullable=False)
         cities = relationship("City", backref="state",
                               cascade="all, delete-orphan")
     else:
+        name = ""
+
         @property
         def cities(self):
             """Gets the states id"""
-            from models.engine import FileStorage
-            curr_objs = FileStorage.all()
-            city_list = [value for key, value in curr_objs
-                         if self.id in key and "City" in key]
+            from models.engine.file_storage import FileStorage
+            curr_objs = FileStorage.all(City)
+            city_list = [value for key, value in curr_objs.items()
+                         if self.id in key]
             return city_list
