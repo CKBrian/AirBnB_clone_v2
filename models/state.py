@@ -32,8 +32,10 @@ class State(BaseModel, Base):
         @property
         def cities(self):
             """Gets the states id"""
+            from models.city import City
             from models.engine.file_storage import FileStorage
             curr_objs = FileStorage.all(City)
             city_list = [value for key, value in curr_objs.items()
-                         if self.id in key]
+                         if "City" in key and
+                         self.id == value.to_dict().get('state_id')]
             return city_list
