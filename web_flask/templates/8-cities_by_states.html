@@ -10,9 +10,9 @@
                 <LI>{{ value }}: <B>{{ key }}</B>
                     <UL>
                         {%- for key1, value1 in cities.items() %}
-                            {% if value1 == value %}
-                                <LI>{{ city_ids[key1] }}: <B>{{ key1 }}</B></LI>
-                            {% endif %}
+                        {% if value1 == value %}
+                        <LI>{{ city_ids[key1] }}: <B>{{ key1 }}</B></LI>
+                        {% endif %}
                         {%- endfor %}
                     </UL>
                 </LI>
