@@ -6,7 +6,7 @@
     <BODY>
         <H1>States</H1>
         <UL>
-            {% for key, value in states.items() %}
+            {%- for key, value in states.items() %}
                 <LI>{{ value }}: <B>{{ key }}</B>
                     <UL>
                         {%- for key1, value1 in cities.items() %}
@@ -16,7 +16,7 @@
                         {%- endfor %}
                     </UL>
                 </LI>
-            {% endfor %}
+            {%- endfor %}
         </UL>
     </BODY>
 </HTML>
