@@ -6,17 +6,17 @@
     <BODY>
         <H1>States</H1>
         <UL>
-            {% for key, value in states.items() %}
+            {%- for key, value in states.items() %}
                 <LI>{{ value }}: <B>{{ key }}</B>
                     <UL>
-                        {% for key1, value1 in cities.items() %}
-                            {% if value1 == value %}
+                        {%- for key1, value1 in cities.items() %}
+                            {%- if value1 == value %}
                                 <LI>{{ city_ids[key1] }}: <B>{{ key1 }}</B></LI>
-                            {% endif %}
-                        {% endfor %}
+                            {%- endif %}
+                        {%- endfor %}
                     </UL>
                 </LI>
-            {% endfor %}
+            {%- endfor %}
         </UL>
     </BODY>
 </HTML>
