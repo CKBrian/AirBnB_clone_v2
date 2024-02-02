@@ -24,6 +24,7 @@ def get_list(cls, arg):
 
 @app.route('/hbnb_filters', strict_slashes=False)
 def hbnb_filters():
+    """ Renders State , Amenity and City objects to a html webpage"""
     states = get_list(State, 'id')
     cities = get_list(City, 'state_id')
     amenities = get_list(Amenity, 'id')
@@ -33,7 +34,7 @@ def hbnb_filters():
 
 @app.teardown_appcontext
 def teardown_appcontext(exception):
-    """Closes the current session storage engine"""
+    """ Closes the current session storage engine"""
     storage.close()
 
 
