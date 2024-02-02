@@ -13,12 +13,8 @@ app = Flask(__name__, template_folder='.')
 def states_lst():
     """Returns HBNB"""
     curr_objs = storage.all(State)
-    state_dict = {value.to_dict().get('name'): value.to_dict().get('id')
-                  for key, value in curr_objs.items()}
-    keys = list(state_dict.keys())
-    keys.sort()
-    states = {key: state_dict[key] for key in keys}
-    return render_template('templates/7-states_list.html', states=states)
+    States = curr_objs.values()
+    return render_template('templates/7-states_list.html', States=States)
 
 
 @app.teardown_appcontext
