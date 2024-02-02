@@ -40,6 +40,7 @@ def cities_by_states(id):
 
 @app.route('/states', strict_slashes=False)
 def states_lst():
+    """Returns HBNB"""
     states = get_list(State, 'id')
     return render_template('templates/7-states_list.html', states=states)
 
